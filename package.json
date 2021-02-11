@@ -1,0 +1,24 @@
+{
+  "name": "fullstack-backend",
+  "version": "1.0.0",
+  "description": "A fullstack documented login API task to be connected with a frontend framework or library like react.js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "login",
+    "api",
+    "fullstack"
+  ],
+  "author": "Peter Ihimire",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.2",
+    "mongoose": "^5.11.15",
+    "nodemon": "^2.0.7",
+    "uuid": "^8.3.2"
+  }
+}
