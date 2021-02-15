@@ -1,14 +1,17 @@
-const mongoose = require("mongoose");
+const users = [];
 
-const Schema = mongoose.Schema;
+module.exports = class User {
+  constructor(username, email, password) {
+    this.name = username;
+    this.email = email;
+    this.password = password;
+  }
 
-const userSchema = new Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-  },
-  { timestamps: true }
-);
+  save() {
+    users.push(this);
+  }
 
-module.exports = mongoose.model("User", userSchema);
+  static fetchAll() {
+    return users;
+  }
+};

@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // => /api/users/
-app.use("/api/user", usersRoutes);
+app.use("/api/users", usersRoutes);
 
 // Error handling for unregistered routes
 app.use((req, res, next) => {
