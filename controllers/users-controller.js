@@ -25,11 +25,20 @@ const signup = (req, res, next) => {
 };
 
 // GET USERS CONTROLLER
+// const getUsers = (req, res, next) => {
+//   const users = User.fetchAll();
+//   res.status(200).json({
+//     message: "All users",
+//     users: users,
+//   });
+// };
+
 const getUsers = (req, res, next) => {
-  const users = User.fetchAll();
-  res.status(200).json({
-    message: "All users",
-    users: users,
+  User.fetchAll((users) => {
+    res.status(200).json({
+      message: "All users",
+      users: users,
+    });
   });
 };
 
