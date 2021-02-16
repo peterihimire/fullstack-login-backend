@@ -1,13 +1,21 @@
 const path = require("path");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const db = require("./util/database");
 
 const usersRoutes = require("./routes/users-routes");
 
 const HttpError = require("./models/http-error");
 
 const app = express();
+
+db.execute("SELECT * FROM users")
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((err) => console.log(err));
 
 app.use(bodyParser.json());
 
