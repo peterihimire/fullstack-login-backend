@@ -11,11 +11,11 @@ const HttpError = require("./models/http-error");
 
 const app = express();
 
-db.execute("SELECT * FROM users")
-  .then((result) => {
-    console.log(result);
-  })
-  .catch((err) => console.log(err));
+// db.execute("SELECT * FROM users")
+//   .then((result) => {
+//     console.log(result);
+//   })
+//   .catch((err) => console.log(err));
 
 app.use(bodyParser.json());
 

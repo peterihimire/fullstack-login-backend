@@ -2,44 +2,42 @@ const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const User = require("../models/user");
 
-// const DUMMY_USERS = [
-//   {
-//     id: "u1",
-//     name: "Peter Ihimire",
-//     email: "peterihimire@gmail.com",
-//     password: "123456",
-//   },
-// ];
-
 // SIGNUP CONTROLLER
 const signup = (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
   const user = new User(name, email, password);
-  user.save();
-  res.status(201).json({
-    message: "Signup successful !",
-    user: user,
-  });
+  user
+    .save()
+    .then((uzer) => {
+      // console.log(uzer[0]);
+      res.status(201).json({
+        message: "Signup successful !",
+        user: uzer[0],
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 // GET USERS CONTROLLER
 // const getUsers = (req, res, next) => {
-//   const users = User.fetchAll();
-//   res.status(200).json({
-//     message: "All users",
-//     users: users,
-//   });
-// };
 
 const getUsers = (req, res, next) => {
-  User.fetchAll((users) => {
-    res.status(200).json({
-      message: "All users",
-      users: users,
-    });
-  });
+  User.fetchAll()
+    // .then(([rows, fieldData]) => {
+    //   res.status(200).json({
+    //     message: "All users",
+    //     users: rows,
+    //   });
+    // })
+    .then((results) => {
+      res.status(200).json({
+        message: "All users",
+        users: results[0],
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 // LOGIN CONTROLLER
