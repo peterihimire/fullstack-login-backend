@@ -10,6 +10,15 @@ const router = express.Router();
 // /api/users => GET
 router.get("/", usersController.getUsers);
 
+// /api/users/userId => GET
+router.get("/:userId", usersController.getUser);
+
+// /api/users/userId => PUT
+router.put("/:userId", usersController.editUser);
+
+// /api/users/signup => DELETE
+router.delete("/:userId", usersController.deleteUser);
+
 // /api/users/signup => POST
 router.post("/signup", usersController.signup);
 

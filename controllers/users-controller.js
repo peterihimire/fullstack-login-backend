@@ -20,9 +20,7 @@ const signup = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-// GET USERS CONTROLLER
-// const getUsers = (req, res, next) => {
-
+// GET ALL USERS CONTROLLER
 const getUsers = (req, res, next) => {
   User.fetchAll()
     // .then(([rows, fieldData]) => {
@@ -40,6 +38,48 @@ const getUsers = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+// GET A SINGLE USER
+const getUser = (req, res, next) => {
+  const userId = req.params.userId;
+  User.findById(userId)
+    .then(([user]) => {
+      // console.log(user);
+      res.status(200).json({
+        message: "Single user",
+        user: user[0],
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// EDIT A SINGLE USER
+const updateUser = (req, res, next) => {
+  const userId = req.params.userId;
+  User.updateById(userId)
+    .then(([user]) => {
+      console.log(user);
+      // res.status(200).json({
+      //   message: "User updated successfully",
+      //   user: user,
+      // });
+    })
+    .catch((err) => console.log(err));
+};
+
+// DELETE A SINGLE USER
+const deleteUserById = (req, res, next) => {
+  const userId = req.params.userId;
+  User.deleteById(userId)
+    .then(([user]) => {
+      console.log(user);
+      res.status(200).json({
+        message: "Deleted user Successful",
+        user: user,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
 // LOGIN CONTROLLER
 const login = (req, res, next) => {
   res.json({ message: "Yeah, I bet you , we are comming there!" });
@@ -47,4 +87,20 @@ const login = (req, res, next) => {
 
 exports.signup = signup;
 exports.getUsers = getUsers;
+exports.getUser = getUser;
+exports.editUser = updateUser;
+exports.deleteUser = deleteUserById;
 exports.login = login;
+// const { name, email, password } = req.body;
+// let updatedUser;
+// updatedUser = User.findById(userId)
+//   .then(([updatedUser]) => {
+//     updatedUser.name = name;
+//     updatedUser.email = email;
+//     updatedUser.password = password;
+//     console.log(updatedUser);
+//     // res.status(200).json({
+//     //   message: "User updated successfully",
+//     //   user: user[0],
+//     // });
+//   })
