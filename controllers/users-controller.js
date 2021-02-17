@@ -43,7 +43,6 @@ const getUser = (req, res, next) => {
   const userId = req.params.userId;
   User.findById(userId)
     .then(([user]) => {
-      // console.log(user);
       res.status(200).json({
         message: "Single user",
         user: user[0],
@@ -55,13 +54,21 @@ const getUser = (req, res, next) => {
 // EDIT A SINGLE USER
 const updateUser = (req, res, next) => {
   const userId = req.params.userId;
-  User.updateById(userId)
-    .then(([user]) => {
-      console.log(user);
-      // res.status(200).json({
-      //   message: "User updated successfully",
-      //   user: user,
-      // });
+  const { name, email, password } = req.body;
+  let updatedUser;
+
+  User.findById(userId)
+    .then(([updatedUser]) => {
+      updatedUser.name = name;
+      updatedUser.email = email;
+      updatedUser.password = password;
+      console.log(updatedUser);
+    })
+    .then((updatedUser) => {
+      res.status(200).json({
+        message: "User updated successfully",
+        user: updatedUser,
+      });
     })
     .catch((err) => console.log(err));
 };

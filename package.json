@@ -23,6 +23,7 @@
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.15",
     "mysql2": "^2.2.5",
+    "sequelize": "^6.5.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
