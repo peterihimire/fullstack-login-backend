@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/", usersController.getUsers);
 
 // /api/users/userId => GET
-router.get("/:userId", usersController.getUser);
+router.get("/:userId", usersController.getUserById);
 
 // /api/users/userId => PUT
 router.put("/:userId", usersController.editUser);
@@ -22,7 +22,7 @@ router.delete("/:userId", usersController.deleteUser);
 // /api/users/signup => POST
 router.post("/signup", usersController.signup);
 
-// /api/users/login => POST
-router.post("/login", usersController.login);
+// // /api/users/login => POST
+// router.post("/login", usersController.login);
 
 module.exports = router;

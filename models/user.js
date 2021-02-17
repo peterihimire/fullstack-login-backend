@@ -50,7 +50,7 @@ module.exports = User;
 //   }
 
 //   static updateById(id) {
-//     return db.execute("UPDATE users SET = ?  WHERE users.id = ?", [id]);
+//     return db.execute("UPDATE users SET name =?, email =?, password =?  WHERE users.id = ?", [id]);
 //   }
 //   static deleteById(id) {
 //     return db.execute("DELETE FROM users WHERE users.id= ?", [id]);
