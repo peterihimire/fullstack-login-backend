@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const sequelize = require("./util/database");
 
 const usersRoutes = require("./routes/users-routes");
+const propertiesRoutes = require("./routes/properties-routes");
+const adminRoutes = require("./routes/admin-routes");
 
 const HttpError = require("./models/http-error");
 
@@ -15,6 +17,12 @@ app.use(bodyParser.json());
 
 // => /api/users/
 app.use("/api/users", usersRoutes);
+
+// => /api/properties/
+app.use("/api/properties", propertiesRoutes);
+
+// => /api/admin/
+app.use("/api/admin", adminRoutes);
 
 // Error handling for unregistered routes
 app.use((req, res, next) => {
