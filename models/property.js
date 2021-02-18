@@ -35,6 +35,7 @@ const Property = sequelize.define("property", {
   },
   images: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
 });
 

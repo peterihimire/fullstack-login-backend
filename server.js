@@ -2,8 +2,11 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+
 const mongoose = require("mongoose");
 const sequelize = require("./util/database");
+const Property = require("./models/property");
+const User = require("./models/user");
 
 const usersRoutes = require("./routes/users-routes");
 const propertiesRoutes = require("./routes/properties-routes");
@@ -14,6 +17,16 @@ const HttpError = require("./models/http-error");
 const app = express();
 
 app.use(bodyParser.json());
+
+// This middleware stores the user in the req and makes it possible for the user to be accessible from anywhere in the project
+app.use((req, res, next) => {
+  // we will reach out to the database
+  User.findByPk(1)
+    .then((user) => {
+      console.log(user);
+    })
+    .catch((err) => console.log(err));
+});
 
 // => /api/users/
 app.use("/api/users", usersRoutes);
@@ -40,21 +53,34 @@ app.use((error, req, res, next) => {
 
 const PORT = 7000;
 
+// // A property created by a user, and once the user is deleted the properties associated with the user deletes aswell, we can configure it with optional parameters
+// Property.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+// A user can select more than one property to booking list
+User.hasMany(Property);
+
 sequelize
+  // .sync({ force: true })
   .sync()
   .then((result) => {
     // console.log(result);
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({
+        name: "Peter Ihimire",
+        email: "peterihimire@gmail.com",
+        password: "1234567",
+      });
+    }
+    return user; // or we can simply write [ return Promise.resolve(user) ] they all mean same as what is returned is always a promise that will technically resolve to a user.
+  })
+  .then((user) => {
+    console.log(user);
     app.listen(PORT, function () {
       console.log(`Server running on port ${PORT}...`);
     });
   })
   .catch((err) => console.log(err));
-
-// mongoose
-//   .connect()
-//   .then(() => {
-//     app.listen(PORT, function () {
-//       console.log(`Server running on port ${PORT}`);
-//     });
-//   })
-//   .catch((err) => console.log(err));
+// when we hit npm start it starts from the sequelize, but when we register a request it starts from the top down to the bottom , then at that time will it see the user already in the request funnel and makes use of it.

@@ -7,18 +7,6 @@ const usersController = require("../controllers/users-controller");
 
 const router = express.Router();
 
-// /api/users => GET
-router.get("/", usersController.getUsers);
-
-// /api/users/userId => GET
-router.get("/:userId", usersController.getUserById);
-
-// /api/users/userId => PUT
-router.put("/:userId", usersController.editUser);
-
-// /api/users/signup => DELETE
-router.delete("/:userId", usersController.deleteUser);
-
 // /api/users/signup => POST
 router.post("/signup", usersController.signup);
 
@@ -26,3 +14,19 @@ router.post("/signup", usersController.signup);
 // router.post("/login", usersController.login);
 
 module.exports = router;
+//
+//
+//
+//
+//
+// // /api/users => GET
+// router.get("/", usersController.getUsers);
+
+// // /api/users/userId => GET
+// router.get("/:userId", usersController.getUserById);
+
+// // /api/users/userId => PUT
+// router.put("/:userId", usersController.editUser);
+
+// // /api/users/signup => DELETE
+// router.delete("/:userId", usersController.deleteUser);
