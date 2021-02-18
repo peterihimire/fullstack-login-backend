@@ -1,20 +1,29 @@
 const User = require("../models/user");
+const Property = require("../models/property");
 
-// POST / SIGNUP CONTROLLER
-const signup = (req, res, next) => {
+// CREATE PROPERTY CONTROLLER
+const createProperty = (req, res, next) => {
   const name = req.body.name;
-  const email = req.body.email;
-  const password = req.body.password;
+  const slug = req.body.slug;
+  const location = req.body.location;
+  const amount = req.body.amount;
+  const completion = req.body.completion;
+  const detail = req.body.detail;
+  const images = req.body.images;
 
-  User.create({
+  Property.create({
     name: name,
-    email: email,
-    password: password,
+    slug: slug,
+    location: location,
+    amount: amount,
+    completion: completion,
+    detail: detail,
+    images: images,
   })
-    .then((uzer) => {
+    .then((property) => {
       res.status(201).json({
-        message: "Signup successful !",
-        user: uzer,
+        status: "Property Creation successful !",
+        property: property,
       });
     })
     .catch((err) => {
@@ -22,6 +31,77 @@ const signup = (req, res, next) => {
     });
 };
 
+// READ ALL PROPERTIES CONTROLLER
+const getProperties = (req, res, next) => {
+  Property.findAll()
+    .then((properties) => {
+      res.status(200).json({
+        status: "All Properties",
+        properties: properties,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// READ A SINGLE PROPERTY
+const getPropertiesById = (req, res, next) => {
+  const propertyId = req.params.propertyId;
+  Property.findByPk(propertyId)
+    .then((property) => {
+      res.status(200).json({
+        status: "Single Property",
+        property: property,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// UPDATE A SINGLE PROPERTY
+const updatePropertiesById = (req, res, next) => {
+  const propertyId = req.params.propertyId;
+  const { name, slug, location, amount, completion, detail, images } = req.body;
+
+  Property.findByPk(propertyId)
+    .then((updatedProperty) => {
+      updatedProperty.name = name;
+      updatedProperty.slug = slug;
+      updatedProperty.location = location;
+      updatedProperty.amount = amount;
+      updatedProperty.completion = completion;
+      updatedProperty.detail = detail;
+      updatedProperty.images = images;
+      return updatedProperty.save();
+    })
+    .then((updatedProperty) => {
+      res.status(200).json({
+        status: "Property update successful",
+        property: updatedProperty,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// DELETE A SINGLE PROPERTY
+const deletePropertiesById = (req, res, next) => {
+  const propertyId = req.params.propertyId;
+  Property.findByPk(propertyId)
+    .then((property) => {
+      console.log(property);
+      return property.destroy();
+    })
+    .then((result) => {
+      res.status(200).json({
+        message: "Property Delete Successful",
+        user: result,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+//
+//
+//
+//
+//
 // GET ALL USERS CONTROLLER
 const getUsers = (req, res, next) => {
   User.findAll()
@@ -45,14 +125,6 @@ const getUserById = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
-  // User.findAll({ where: { Id: userId } })
-  //   .then((product) => {
-  //     res.status(200).json({
-  //       message: "Single user",
-  //       user: product[0],
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
 };
 
 // EDIT A SINGLE USER
@@ -112,7 +184,11 @@ const deleteUserById = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-exports.signup = signup;
+exports.createProperty = createProperty;
+exports.getProperties = getProperties;
+exports.getPropertiesById = getPropertiesById;
+exports.updatePropertiesById = updatePropertiesById;
+exports.deletePropertiesById = deletePropertiesById;
 exports.getUsers = getUsers;
 exports.getUserById = getUserById;
 exports.editUser = updateUser;

@@ -11,21 +11,21 @@ router.post("/property", adminController.createProperty);
 router.get("/properties", adminController.getProperties);
 
 // /api/admin/properties/propertyId => GET
-router.get("/properties/:propertyId", adminController.getPropertyById);
+router.get("/properties/:propertyId", adminController.getPropertiesById);
 
 // /api/admin/properties/propertyId => PUT
-router.put("/properties/:propertyId", adminController.updatePropertyById);
+router.put("/properties/:propertyId", adminController.updatePropertiesById);
 
 // /api/admin/properties/propertyId => DELETE
-router.delete("/properties/:propertyId", adminController.deletePropertyById);
+router.delete("/properties/:propertyId", adminController.deletePropertiesById);
 
-// /api/admin/users => GET
-router.get("/users", adminController.getUsers);
+// // /api/admin/users => GET
+// router.get("/users", adminController.getUsers);
 
-// /api/admin/users/userId => GET
-router.get("/users/:userId", adminController.getUserById);
+// // /api/admin/users/userId => GET
+// router.get("/users/:userId", adminController.getUserById);
 
-// /api/admin/users/userId => DELETE
-router.delete("/users/:userId", adminController.deleteUserById);
+// // /api/admin/users/userId => DELETE
+// router.delete("/users/:userId", adminController.deleteUserById);
 
 module.exports = router;
