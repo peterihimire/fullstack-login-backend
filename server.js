@@ -41,7 +41,10 @@ app.use("/api/admin", adminRoutes);
 
 // Error handling for unregistered routes
 app.use((req, res, next) => {
-  const error = new HttpError("could not find this route!", 404);
+  const error = new HttpError(
+    "could not find this route! To access property api, use http://localhost:7000/api/properties",
+    404
+  );
   throw error;
 });
 // Error handling middleware
@@ -52,7 +55,7 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({
     status: "Unsuccessful",
-    message: error.message || "An unknown error occurred",
+    msg: error.message || "An unknown error occurred",
   });
 });
 
