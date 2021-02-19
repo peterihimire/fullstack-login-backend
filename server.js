@@ -23,7 +23,9 @@ app.use((req, res, next) => {
   // we will reach out to the database
   User.findByPk(1)
     .then((user) => {
-      console.log(user);
+      // console.log(user);
+      req.user = user;
+      next();
     })
     .catch((err) => console.log(err));
 });
@@ -48,7 +50,10 @@ app.use((error, req, res, next) => {
     return next(error);
   }
   res.status(error.code || 500);
-  res.json({ message: error.message || "An unknown error occurred" });
+  res.json({
+    status: "Unsuccessful",
+    message: error.message || "An unknown error occurred",
+  });
 });
 
 const PORT = 7000;
@@ -57,7 +62,7 @@ const PORT = 7000;
 // Property.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 
 // A user can select more than one property to booking list
-User.hasMany(Property);
+// User.hasMany(Property);
 
 sequelize
   // .sync({ force: true })
@@ -70,14 +75,14 @@ sequelize
     if (!user) {
       return User.create({
         name: "Peter Ihimire",
-        email: "peterihimire@gmail.com",
+        email: "pihimire@gmail.com",
         password: "1234567",
       });
     }
     return user; // or we can simply write [ return Promise.resolve(user) ] they all mean same as what is returned is always a promise that will technically resolve to a user.
   })
   .then((user) => {
-    console.log(user);
+    // console.log(user);
     app.listen(PORT, function () {
       console.log(`Server running on port ${PORT}...`);
     });

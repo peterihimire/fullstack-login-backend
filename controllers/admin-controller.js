@@ -48,6 +48,11 @@ const getPropertiesById = (req, res, next) => {
   const propertyId = req.params.propertyId;
   Property.findByPk(propertyId)
     .then((property) => {
+      if (!property) {
+        const error = new Error("Property not found for this particular id.");
+        error.code = 404;
+        return next(error);
+      }
       res.status(200).json({
         status: "Single Property",
         property: property,
@@ -119,6 +124,12 @@ const getUserById = (req, res, next) => {
   const userId = req.params.userId;
   User.findByPk(userId)
     .then((user) => {
+      if (!user) {
+        return res.status(404).json({
+          status: "Unsuccessful",
+          message: "User not found for this Id",
+        });
+      }
       res.status(200).json({
         message: "Single user",
         user: user,
