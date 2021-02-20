@@ -1,17 +1,25 @@
 const User = require("../models/user");
 const Property = require("../models/property");
 const HttpError = require("../models/http-error");
+const { validationResult } = require("express-validator");
 
 // @route POST api/admin/property
 // @desc To create a new property
 // @access Public
 const createProperty = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs passed, please check your fields.", 422)
+    );
+  }
+
   const name = req.body.name;
   const slug = req.body.slug;
   const location = req.body.location;
   const amount = req.body.amount;
   const completion = req.body.completion;
-  const detail = req.body.detail;
+  const description = req.body.description;
   const images = req.body.images;
 
   Property.create({
@@ -20,7 +28,7 @@ const createProperty = (req, res, next) => {
     location: location,
     amount: amount,
     completion: completion,
-    detail: detail,
+    description: description,
     images: images,
   })
     .then((property) => {
@@ -80,8 +88,22 @@ const getPropertiesById = (req, res, next) => {
 // @desc To update the data of a single property
 // @access Public
 const updatePropertiesById = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs passed, please check your fields.", 422)
+    );
+  }
   const propertyId = req.params.propertyId;
-  const { name, slug, location, amount, completion, detail, images } = req.body;
+  const {
+    name,
+    slug,
+    location,
+    amount,
+    completion,
+    description,
+    images,
+  } = req.body;
 
   Property.findByPk(propertyId)
     .then((property) => {
@@ -98,7 +120,7 @@ const updatePropertiesById = (req, res, next) => {
       updatedProperty.location = location;
       updatedProperty.amount = amount;
       updatedProperty.completion = completion;
-      updatedProperty.detail = detail;
+      updatedProperty.description = description;
       updatedProperty.images = images;
       return updatedProperty.save();
     })

@@ -29,7 +29,7 @@ const Property = sequelize.define("property", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  detail: {
+  description: {
     type: Sequelize.TEXT,
     allowNull: false,
   },
