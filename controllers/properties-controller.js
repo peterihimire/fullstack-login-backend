@@ -1,6 +1,8 @@
 const Property = require("../models/property");
 
-// READ ALL PROPERTIES CONTROLLER
+// @route GET api/properties
+// @desc To retrieve all properties
+// @access Public
 const getProperties = (req, res, next) => {
   Property.findAll()
     .then((properties) => {
@@ -12,7 +14,9 @@ const getProperties = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-// READ A SINGLE PROPERTY
+// @route GET api/properties/id
+// @desc To retrieve a single property with a particular id
+// @access Public
 const getPropertiesById = (req, res, next) => {
   const propertyId = req.params.propertyId;
   Property.findByPk(propertyId)
@@ -24,7 +28,6 @@ const getPropertiesById = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
-
 
 exports.getProperties = getProperties;
 exports.getPropertiesById = getPropertiesById;

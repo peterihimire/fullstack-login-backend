@@ -16,6 +16,10 @@ const HttpError = require("./models/http-error");
 
 const app = express();
 
+// // Works with form
+// app.use(bodyParser.urlenconded());
+// This will pass any incoming request body and extract any json data which is there and convert it to regular javascript data structure like objects and arrays and then call next automatically so that we can reach the next middleware in line which are our own custom routes and then also add this json data there. So in the properties controller and create property will now be able to get the past body and we get it on a request body property
+
 app.use(bodyParser.json());
 
 // This middleware stores the user in the req and makes it possible for the user to be accessible from anywhere in the project

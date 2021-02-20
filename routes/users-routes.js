@@ -10,8 +10,8 @@ const router = express.Router();
 // /api/users/signup => POST
 router.post("/signup", usersController.signup);
 
-// // /api/users/login => POST
-// router.post("/login", usersController.login);
+// /api/users/login => POST
+router.post("/login", usersController.login);
 
 module.exports = router;
 //

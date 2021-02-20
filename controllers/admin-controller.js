@@ -25,7 +25,8 @@ const createProperty = (req, res, next) => {
   })
     .then((property) => {
       res.status(201).json({
-        status: "Property Creation successful !",
+        status: "Successful",
+        msg: "Property Created",
         property: property,
       });
     })
@@ -40,7 +41,7 @@ const createProperty = (req, res, next) => {
 const getProperties = (req, res, next) => {
   Property.findAll()
     .then((properties) => {
-      if (!properties) {
+      if (!properties || properties.length === 0) {
         const error = new Error("No properties found.");
         error.code = 404;
         return next(error);
@@ -145,12 +146,8 @@ const deletePropertiesById = (req, res, next) => {
 const getUsers = (req, res, next) => {
   User.findAll()
     .then((users) => {
-      if (!users) {
-        const error = new Error("No users found.");
-        error.code = 404;
-        return next(error);
-      } else if (users.length === 0) {
-        const error = new Error("Users record empty.");
+      if (!users || users.length === 0) {
+        const error = new Error("No users record found.");
         error.code = 404;
         return next(error);
       }
@@ -182,6 +179,14 @@ const getUserById = (req, res, next) => {
         user: user,
       });
     })
+    // User.findAll({ where: { Id: userId } })
+    //   .then((product) => {
+    //     res.status(200).json({
+    //       message: "Single user",
+    //       user: product[0],
+    //     });
+    //   })
+    //   .catch((err) => console.log(err));
     .catch((err) => console.log(err));
 };
 
@@ -217,8 +222,8 @@ const deleteUserById = (req, res, next) => {
 //
 //
 //
-// EDIT A SINGLE USER
-// @route POST api/admin/property
+
+// @route POST api/users/id
 // @desc To retrieve the data of all properties
 // @access Public
 const getUpdateUser = (req, res, next) => {
@@ -241,7 +246,6 @@ const getUpdateUser = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-// EDIT A SINGLE USER
 // @route POST api/admin/property
 // @desc To retrieve the data of all properties
 // @access Public
@@ -266,6 +270,7 @@ const updateUser = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+// Node way of exporting multiple methods in a single file
 exports.createProperty = createProperty;
 exports.getProperties = getProperties;
 exports.getPropertiesById = getPropertiesById;

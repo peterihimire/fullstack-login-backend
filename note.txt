@@ -1,4 +1,4 @@
-FOR THE MODEL
+FOR THE MODEL WITH ARRAY AND FILE-SYSTEM
 
 // const users = [];
 // used above when saving with array
@@ -53,7 +53,7 @@ module.exports = class User {
   }
 };
 
-FOR THE CONTROLLER
+FOR THE CONTROLLER WITH ARRAY AND FILE-SYSTEM
 
 const User = require("../models/user");
 
@@ -90,3 +90,145 @@ const getUsers = (req, res, next) => {
   });
 };
 // The above is for storing data with file which has a callback
+
+
+
+FOR THE MODEL WITH MYSQL QUERYING WITHOUT ORM
+
+// Working with MYSQL Database Query directly without an ORM
+// const db = require("../util/database");
+
+module.exports = class User {
+  constructor(username, email, password) {
+    this.name = username;
+    this.email = email;
+    this.password = password;
+  }
+
+  save() {
+    return db.execute(
+      "INSERT INTO users (name, email, password) VALUES (?, ?, ?) ",
+      [this.name, this.email, this.password]
+    );
+  }
+
+  static fetchAll() {
+    return db.execute("SELECT * FROM users");
+  }
+
+  static findById(id) {
+    return db.execute("SELECT * FROM users WHERE users.id= ?", [id]);
+  }
+
+  static updateById(id) {
+    return db.execute("UPDATE users SET name =?, email =?, password =?  WHERE users.id = ?", [id]);
+  }
+  static deleteById(id) {
+    return db.execute("DELETE FROM users WHERE users.id= ?", [id]);
+  }
+};
+
+FOR THE CONTROLLER WITH MYSQL QUERYING WITHOUT ORM
+
+// WORKING WITH SQL QUERY LANGUAGE
+const HttpError = require("../models/http-error");
+const { validationResult } = require("express-validator");
+const User = require("../models/user");
+
+// SIGNUP CONTROLLER
+const signup = (req, res, next) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const user = new User(name, email, password);
+  user
+    .save()
+    .then((uzer) => {
+      // console.log(uzer[0]);
+      res.status(201).json({
+        message: "Signup successful !",
+        user: uzer[0],
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// GET ALL USERS CONTROLLER
+const getUsers = (req, res, next) => {
+  User.fetchAll()
+    // .then(([rows, fieldData]) => {
+    //   res.status(200).json({
+    //     message: "All users",
+    //     users: rows,
+    //   });
+    // })
+    .then((results) => {
+      res.status(200).json({
+        message: "All users",
+        users: results[0],
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// GET A SINGLE USER
+const getUser = (req, res, next) => {
+  const userId = req.params.userId;
+  User.findById(userId)
+    .then(([user]) => {
+      res.status(200).json({
+        message: "Single user",
+        user: user[0],
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// EDIT A SINGLE USER
+const updateUser = (req, res, next) => {
+  const userId = req.params.userId;
+  const { name, email, password } = req.body;
+  let updatedUser;
+
+  User.findById(userId)
+    .then(([updatedUser]) => {
+      updatedUser.name = name;
+      updatedUser.email = email;
+      updatedUser.password = password;
+      console.log(updatedUser);
+      return updatedUser.save();
+    })
+    .then((updatedUser) => {
+      res.status(200).json({
+        message: "User updated successfully",
+        user: updatedUser,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// DELETE A SINGLE USER
+const deleteUserById = (req, res, next) => {
+  const userId = req.params.userId;
+  User.deleteById(userId)
+    .then(([user]) => {
+      console.log(user);
+      res.status(200).json({
+        message: "Deleted user Successful",
+        user: user,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// LOGIN CONTROLLER
+const login = (req, res, next) => {
+  res.json({ message: "Yeah, I bet you , we are comming there!" });
+};
+
+exports.signup = signup;
+exports.getUsers = getUsers;
+exports.getUser = getUser;
+exports.editUser = updateUser;
+exports.deleteUser = deleteUserById;
+exports.login = login;

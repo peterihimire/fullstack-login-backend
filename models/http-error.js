@@ -5,4 +5,6 @@ class HttpError extends Error {
     this.code = errorCode; // Adds a code property
   }
 }
+
+// Node way of exporting a single file
 module.exports = HttpError;
