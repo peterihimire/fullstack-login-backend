@@ -40,24 +40,20 @@ const login = (req, res, next) => {
     );
   }
 
-  User.findAll({ where: { email: email, password: password } })
-    .then(([user]) => {
-      if (!user) {
+  User.findOne({ where: { email: email } })
+    .then((user) => {
+      if (!user || user.password !== password) {
         return next(
           new HttpError("A user with this credential does not exist .", 401)
         );
       }
-      // console.log(user);
-      return (loadedUser = user);
-    })
-    .then((user) => {
-      console.log(user);
       return res.status(200).json({
         status: "Successful",
         msg: "Now you are logged in",
         user: user,
       });
     })
+
     .catch((err) => console.log(err));
 };
 
