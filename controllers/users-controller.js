@@ -58,12 +58,6 @@ const login = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  if (!email || !password) {
-    return next(
-      new HttpError("Request missing username or password parameters.", 400)
-    );
-  }
-
   User.findOne({ where: { email: email } })
     .then((user) => {
       if (!user) {

@@ -1,13 +1,14 @@
-const path = require("path");
-
 const express = require("express");
 const bodyParser = require("body-parser");
 
-const mongoose = require("mongoose");
+// MODELS
 const sequelize = require("./util/database");
 const Property = require("./models/property");
 const User = require("./models/user");
+const Booking = require("./models/booking");
+const BookingItem = require("./models/booking-item");
 
+// ROUTES
 const usersRoutes = require("./routes/users-routes");
 const propertiesRoutes = require("./routes/properties-routes");
 const adminRoutes = require("./routes/admin-routes");
@@ -16,23 +17,20 @@ const HttpError = require("./models/http-error");
 
 const app = express();
 
-// // Works with form
-// app.use(bodyParser.urlenconded());
-// This will pass any incoming request body and extract any json data which is there and convert it to regular javascript data structure like objects and arrays and then call next automatically so that we can reach the next middleware in line which are our own custom routes and then also add this json data there. So in the properties controller and create property will now be able to get the past body and we get it on a request body property
-
+// MIDDLEWARES
 app.use(bodyParser.json());
 
 // This middleware stores the user in the req and makes it possible for the user to be accessible from anywhere in the project
 app.use((req, res, next) => {
-  // we will reach out to the database
   User.findByPk(1)
     .then((user) => {
-      // console.log(user);
       req.user = user;
       next();
     })
     .catch((err) => console.log(err));
 });
+
+// ROUTES MIDDLEWARE
 
 // => /api/users/
 app.use("/api/users", usersRoutes);
@@ -43,7 +41,7 @@ app.use("/api/properties", propertiesRoutes);
 // => /api/admin/
 app.use("/api/admin", adminRoutes);
 
-// Error handling for unregistered routes
+// ERROR HANDLING MIDDLEWARE FOR UNREGISTERED ROUTES
 app.use((req, res, next) => {
   const error = new HttpError(
     "could not find this route! To access property api, use http://localhost:7000/api/properties",
@@ -51,7 +49,7 @@ app.use((req, res, next) => {
   );
   throw error;
 });
-// Error handling middleware
+// ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
@@ -65,17 +63,16 @@ app.use((error, req, res, next) => {
 
 const PORT = 7000;
 
-// // A property created by a user, and once the user is deleted the properties associated with the user deletes aswell, we can configure it with optional parameters
-// Property.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-
-// A user can select more than one property to booking list
-// User.hasMany(Property);
+// RELATIONS OR SEQUELIZE ASSOCIATIONS
+User.hasOne(Booking);
+Booking.belongsTo(User);
+Booking.belongsToMany(Property, { through: BookingItem });
+Property.belongsToMany(Booking, { through: BookingItem });
 
 sequelize
   // .sync({ force: true })
   .sync()
   .then((result) => {
-    // console.log(result);
     return User.findByPk(1);
   })
   .then((user) => {
@@ -86,13 +83,11 @@ sequelize
         password: "1234567",
       });
     }
-    return user; // or we can simply write [ return Promise.resolve(user) ] they all mean same as what is returned is always a promise that will technically resolve to a user.
+    return user;
   })
   .then((user) => {
-    // console.log(user);
     app.listen(PORT, function () {
       console.log(`Server running on port ${PORT}...`);
     });
   })
   .catch((err) => console.log(err));
-// when we hit npm start it starts from the sequelize, but when we register a request it starts from the top down to the bottom , then at that time will it see the user already in the request funnel and makes use of it.
