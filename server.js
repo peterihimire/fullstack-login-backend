@@ -20,6 +20,17 @@ const app = express();
 // MIDDLEWARES
 app.use(bodyParser.json());
 
+// FOR C.O.R.S ERROR
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
 // This middleware stores the user in the req and makes it possible for the user to be accessible from anywhere in the project
 app.use((req, res, next) => {
   User.findByPk(1)
