@@ -86,6 +86,9 @@ sequelize
     return user;
   })
   .then((user) => {
+    return user.createBooking();
+  })
+  .then((user) => {
     app.listen(PORT, function () {
       console.log(`Server running on port ${PORT}...`);
     });

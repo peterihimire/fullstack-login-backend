@@ -4,6 +4,9 @@ const propertiesController = require("../controllers/properties-controller");
 
 const router = express.Router();
 
+// /api/properties/propertyId => GET
+router.get("/booking", propertiesController.getBooking);
+
 // /api/properties => GET
 router.get("/", propertiesController.getProperties);
 
