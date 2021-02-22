@@ -60,18 +60,39 @@ const getBooking = (req, res, next) => {
 // @desc To retrieve our booked properties
 // @access Public
 const createBooking = (req, res, next) => {
-  const propertyId = req.params.propertyId;
+  const propertyId = req.body.propertyId;
+  console.log(propertyId);
+  let fetchedBooking;
+  let newQuantity = 1;
   req.user
     .getBooking()
     .then((booking) => {
       console.log(booking);
+      fetchedBooking = booking;
       return booking.getProperties({ where: { id: propertyId } });
     })
     .then((properties) => {
+      console.log(properties);
       let property;
       if (properties.length > 0) {
         property = properties[0];
       }
+      return Property.findByPk(propertyId)
+        .then((property) => {
+          console.log(property);
+          return fetchedBooking.addProperty(property, {
+            through: { quantity: newQuantity },
+          });
+        })
+        .catch((err) => console.log(err));
+    })
+    .then((booking) => {
+      console.log(booking);
+      res.status(200).json({
+        status: "Successful",
+        msg: "SIngle Booking Item Created",
+        booking: booking,
+      });
     })
     .catch((err) => console.log(err));
 };

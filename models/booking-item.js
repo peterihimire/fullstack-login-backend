@@ -9,6 +9,10 @@ const BookingItem = sequelize.define("bookingItem", {
     allowNull: false,
     primaryKey: true,
   },
+  quantity: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
 });
 
 module.exports = BookingItem;
