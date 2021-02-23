@@ -38,9 +38,10 @@ const createProperty = (req, res, next) => {
         property: property,
       });
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((error) => next(error));
+  // .catch((err) => {
+  //   console.log(err);
+  // });
 };
 
 // @route GET api/admin/properties
@@ -81,7 +82,8 @@ const getPropertiesById = (req, res, next) => {
         property: property,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => next(error));
+  // .catch((err) => console.log(err));
 };
 
 // @route PUT api/admin/properties/id
@@ -131,7 +133,8 @@ const updatePropertiesById = (req, res, next) => {
         property: updatedProperty,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => next(error));
+  // .catch((err) => console.log(err));
 };
 
 // @route DELETE api/admin/properties/id
