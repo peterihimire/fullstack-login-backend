@@ -10,7 +10,7 @@
 
 ## General info
 
-This project is a webapp where users can share their experiences on a shopping platform either as a customer or vendor.
+This is the backend of a fullstack application , where users can signup , signin, only admin can create property , while users can book, view property and more.
 
 ## Technologies
 
