@@ -13,7 +13,12 @@ const getProperties = (req, res, next) => {
         properties: properties,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route GET api/properties/id
@@ -29,7 +34,12 @@ const getPropertiesById = (req, res, next) => {
         property: property,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route GET api/properties/booking
@@ -51,9 +61,19 @@ const getBooking = (req, res, next) => {
             properties: properties,
           });
         })
-        .catch((err) => console.log(err));
+        .catch((error) => {
+          if (!error.statusCode) {
+            error.statusCode = 500;
+          }
+          next(error);
+        });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route POST api/properties/booking
@@ -85,7 +105,12 @@ const createBooking = (req, res, next) => {
           // });
           return fetchedBooking.addProperty(property);
         })
-        .catch((err) => console.log(err));
+        .catch((error) => {
+          if (!error.statusCode) {
+            error.statusCode = 500;
+          }
+          next(error);
+        });
     })
     .then((booking) => {
       console.log(booking);
@@ -95,7 +120,12 @@ const createBooking = (req, res, next) => {
         booking: booking,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route DELETE api/properties/booking
@@ -119,7 +149,12 @@ const deleteBookingItem = (req, res, next) => {
         user: result,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 exports.getProperties = getProperties;

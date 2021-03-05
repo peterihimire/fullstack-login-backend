@@ -8,6 +8,7 @@ const bcrypt = require("bcryptjs");
 // @access Public
 const signup = (req, res, next) => {
   const errors = validationResult(req);
+  console.log(next(error));
   if (!errors.isEmpty()) {
     return next(
       new HttpError("Invalid inputs passed, please check your fields.", 422)
@@ -41,14 +42,27 @@ const signup = (req, res, next) => {
                   user: uzer,
                 });
               })
-              .catch((err) => {
-                console.log(err);
+              .catch((error) => {
+                if (!error.statusCode) {
+                  error.statusCode = 500;
+                }
+                next(error);
               });
           })
-          .catch((err) => console.log(err));
+          .catch((error) => {
+            if (!error.statusCode) {
+              error.statusCode = 500;
+            }
+            next(error);
+          });
       }
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route POST api/user/login
@@ -82,10 +96,20 @@ const login = (req, res, next) => {
           }
           return next(new HttpError("Login failed, Password error .", 401));
         })
-        .catch((err) => console.log(err));
+        .catch((error) => {
+          if (!error.statusCode) {
+            error.statusCode = 500;
+          }
+          next(error);
+        });
     })
 
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 exports.signup = signup;

@@ -38,7 +38,12 @@ const createProperty = (req, res, next) => {
         property: property,
       });
     })
-    .catch((error) => next(error));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
   // .catch((err) => {
   //   console.log(err);
   // });
@@ -61,7 +66,12 @@ const getProperties = (req, res, next) => {
         properties: properties,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route GET api/admin/properties/id
@@ -82,8 +92,12 @@ const getPropertiesById = (req, res, next) => {
         property: property,
       });
     })
-    .catch((error) => next(error));
-  // .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route PUT api/admin/properties/id
@@ -133,7 +147,12 @@ const updatePropertiesById = (req, res, next) => {
         property: updatedProperty,
       });
     })
-    .catch((error) => next(error));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
   // .catch((err) => console.log(err));
 };
 
@@ -162,7 +181,12 @@ const deletePropertiesById = (req, res, next) => {
         user: result,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route GET api/admin/users
@@ -185,7 +209,13 @@ const getUsers = (req, res, next) => {
         users: users,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+  // .catch((error) => next(error));
 };
 
 // @route GeT api/admin/users/id
@@ -212,7 +242,12 @@ const getUserById = (req, res, next) => {
     //     });
     //   })
     //   .catch((err) => console.log(err));
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route DELETE api/admin/property
@@ -240,7 +275,12 @@ const deleteUserById = (req, res, next) => {
         user: result,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 //
 //
@@ -268,7 +308,12 @@ const getUpdateUser = (req, res, next) => {
         user: user,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route POST api/admin/property
@@ -292,7 +337,12 @@ const updateUser = (req, res, next) => {
         user: updatedUser,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // Node way of exporting multiple methods in a single file
