@@ -34,16 +34,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// This middleware stores the user in the req and makes it possible for the user to be accessible from anywhere in the project
-app.use((req, res, next) => {
-  User.findByPk(1)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => console.log(err));
-});
-
 // ROUTES MIDDLEWARE
 
 // => /api/users/
@@ -75,7 +65,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-const PORT = 7000;
+const PORT = process.env.PORT || 7000;
 
 // RELATIONS OR SEQUELIZE ASSOCIATIONS
 User.hasOne(Booking);
@@ -84,25 +74,9 @@ Booking.belongsToMany(Property, { through: BookingItem });
 Property.belongsToMany(Booking, { through: BookingItem });
 
 sequelize
-  // .sync({ force: true })
-  .sync()
+  .sync({ force: true })
+  // .sync()
   .then((result) => {
-    return User.findByPk(1);
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({
-        name: "Peter Ihimire",
-        email: "pihimire@gmail.com",
-        password: "1234567",
-      });
-    }
-    return user;
-  })
-  .then((user) => {
-    return user.createBooking();
-  })
-  .then((user) => {
     app.listen(PORT, function () {
       console.log(`Server running on port ${PORT}...`);
     });
