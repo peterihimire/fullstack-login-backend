@@ -8,7 +8,6 @@ const bcrypt = require("bcryptjs");
 // @access Public
 const signup = (req, res, next) => {
   const errors = validationResult(req);
-  console.log(next(error));
   if (!errors.isEmpty()) {
     return next(
       new HttpError("Invalid inputs passed, please check your fields.", 422)
@@ -24,7 +23,9 @@ const signup = (req, res, next) => {
   User.findOne({ where: { email: email } })
     .then((user) => {
       if (user) {
-        return next(new HttpError("A user with this email does  exist .", 422)); //422 code is used for invalid inputs
+        return next(
+          new HttpError("User exists already , please login instead .", 422)
+        ); //422 code is used for invalid inputs
       } else {
         return bcrypt
           .hash(password, 12) //salt 12 round
@@ -75,9 +76,7 @@ const login = (req, res, next) => {
   User.findOne({ where: { email: email } })
     .then((user) => {
       if (!user) {
-        return next(
-          new HttpError("A user with this credential does not exist .", 401)
-        );
+        return next(new HttpError("Invalid email or password! .", 401));
       }
       return user;
     })
