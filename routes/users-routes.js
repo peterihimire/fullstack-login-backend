@@ -16,7 +16,11 @@ router.post(
       .normalizeEmail()
       .isEmail()
       .withMessage("Please enter a valid email address."),
-    check("password").isAlphanumeric().trim().isLength({ min: 6 }),
+    check("password")
+      .isAlphanumeric()
+      .trim()
+      .isLength({ min: 6 })
+      .withMessage("Password must be minimum of 6 char."),
   ],
   usersController.signup
 );

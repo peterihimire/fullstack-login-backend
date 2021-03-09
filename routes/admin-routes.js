@@ -2,8 +2,12 @@ const express = require("express");
 const { check } = require("express-validator");
 
 const adminController = require("../controllers/admin-controller");
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
+
+// // THIS MAKES SURE THE BELOW ROUTES ARE PROTECTED, SO REQ WITHOUT A VALID TOKEN WILL NOT REACH THE BELOW ROUTES
+// router.use(checkAuth);
 
 // /api/admin/users/property => POST
 router.post(

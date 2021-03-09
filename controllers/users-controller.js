@@ -2,6 +2,7 @@ const HttpError = require("../models/http-error");
 const User = require("../models/user");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // @route POST api/user/signup
 // @desc To create or signup a user
@@ -36,11 +37,11 @@ const signup = (req, res, next) => {
               email: email,
               password: hashedPw,
             })
-              .then((uzer) => {
+              .then((createdUser) => {
                 res.status(201).json({
                   status: "Successful",
                   msg: "User Signedup !",
-                  user: uzer,
+                  user: createdUser,
                 });
               })
               .catch((error) => {
@@ -74,23 +75,37 @@ const login = (req, res, next) => {
   const password = req.body.password;
 
   User.findOne({ where: { email: email } })
-    .then((user) => {
-      if (!user) {
-        return next(new HttpError("Invalid email or password! .", 401));
+    .then((existingUser) => {
+      if (!existingUser) {
+        return next(
+          new HttpError(
+            "User does not exist, please signup for an account! .",
+            401
+          )
+        );
       }
-      return user;
+      return existingUser;
     })
-    .then((user) => {
+    .then((existingUser) => {
       return bcrypt
-        .compare(password, user.password)
+        .compare(password, existingUser.password)
         .then((doMatch) => {
           //domatch or the result here is a boolean true or false
 
           if (doMatch) {
+            const token = jwt.sign(
+              { email: existingUser.email, userId: existingUser.id },
+              "ihimireeromoselepeter",
+              { expiresIn: "1h" }
+            );
+
             return res.status(200).json({
               status: "Successful",
               msg: "Now you are logged in",
-              user: user,
+              token: token,
+              userId: existingUser.id,
+              userName: existingUser.name,
+              // user: user,
             });
           }
           return next(new HttpError("Login failed, Password error .", 401));
@@ -113,3 +128,5 @@ const login = (req, res, next) => {
 
 exports.signup = signup;
 exports.login = login;
+
+// Authentication and Authorization. Authenticaion is about verifying the user, while Authorization is about not allowing the authenticated user to have access to everything.
