@@ -1,6 +1,7 @@
 const express = require("express");
 
 const propertiesController = require("../controllers/properties-controller");
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.post("/booking", propertiesController.createBooking);
 router.delete("/booking", propertiesController.deleteBookingItem);
 
 // /api/properties => GET
-router.get("/", propertiesController.getProperties);
+router.get("/", propertiesController.getProperties); //checkAuth was here
 
 // /api/properties/propertyId => GET
 router.get("/:propertyId", propertiesController.getPropertiesById);

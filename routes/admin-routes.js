@@ -25,7 +25,7 @@ router.post(
 );
 
 // /api/admin/properties => GET
-router.get("/properties", adminController.getProperties);
+router.get("/properties", checkAuth, adminController.getProperties);
 
 // /api/admin/properties/propertyId => GET
 router.get("/properties/:propertyId", adminController.getPropertiesById);
@@ -49,7 +49,7 @@ router.put(
 router.delete("/properties/:propertyId", adminController.deletePropertiesById);
 
 // /api/admin/users => GET
-router.get("/users", adminController.getUsers);
+router.get("/users",checkAuth, adminController.getUsers);
 
 // /api/admin/users/userId => GET
 router.get("/users/:userId", adminController.getUserById);
