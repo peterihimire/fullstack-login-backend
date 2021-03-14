@@ -12,14 +12,25 @@ const router = express.Router();
 // /api/admin/users/property => POST
 router.post(
   "/property",
+  checkAuth,
   [
     check("name").not().isEmpty().withMessage("Name field musy not be empty"),
-    check("slug").not().isEmpty(),
-    check("location").not().isEmpty(),
-    check("amount").isNumeric(),
-    check("completion").isNumeric(),
-    check("description").isLength({ min: 5 }),
-    check("images").not().isEmpty(),
+    check("slug").not().isEmpty().withMessage("Slug field musy not be empty"),
+    check("location")
+      .not()
+      .isEmpty()
+      .withMessage("Location field musy not be empty"),
+    check("amount").isNumeric().withMessage("Amount field musy not be empty"),
+    check("completion")
+      .isNumeric()
+      .withMessage("Completion field musy not be empty"),
+    check("description")
+      .isLength({ min: 5 })
+      .withMessage("Description field musy not be empty"),
+    check("images")
+      .not()
+      .isEmpty()
+      .withMessage("Images field musy not be empty"),
   ],
   adminController.createProperty
 );
@@ -49,10 +60,10 @@ router.put(
 router.delete("/properties/:propertyId", adminController.deletePropertiesById);
 
 // /api/admin/users => GET
-router.get("/users",checkAuth, adminController.getUsers);
+router.get("/users", checkAuth, adminController.getUsers);
 
 // /api/admin/users/userId => GET
-router.get("/users/:userId", adminController.getUserById);
+router.get("/users/:userId", checkAuth, adminController.getUserById);
 
 // /api/admin/users/userId => DELETE
 router.delete("/users/:userId", adminController.deleteUserById);
