@@ -1,5 +1,9 @@
+const fs = require("fs");
+const path = require("path");
+
 const express = require("express");
 const bodyParser = require("body-parser");
+const multer = require("module");
 
 // MODELS
 const sequelize = require("./util/database");
@@ -15,10 +19,20 @@ const adminRoutes = require("./routes/admin-routes");
 
 const HttpError = require("./models/http-error");
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  },
+});
+
 const app = express();
 
 // MIDDLEWARES
 app.use(bodyParser.json());
+app.use(multer({ storage: fileStorage }).single("image"));
 
 // FOR C.O.R.S ERROR
 app.use((req, res, next) => {
