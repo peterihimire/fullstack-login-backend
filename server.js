@@ -3,7 +3,7 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const multer = require("module");
+const multer = require("multer");
 
 // MODELS
 const sequelize = require("./util/database");
@@ -28,11 +28,26 @@ const fileStorage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 const app = express();
 
 // MIDDLEWARES
 app.use(bodyParser.json());
-app.use(multer({ storage: fileStorage }).single("image"));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 // FOR C.O.R.S ERROR
 app.use((req, res, next) => {

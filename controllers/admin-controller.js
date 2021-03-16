@@ -13,14 +13,19 @@ const createProperty = (req, res, next) => {
       new HttpError("Invalid inputs passed, please check your fields.", 422)
     );
   }
-
+  // This check is for image upload check
+  if (!req.file) {
+    return next(new HttpError("No image provided.", 422));
+  }
   const name = req.body.name;
   const slug = req.body.slug;
   const location = req.body.location;
   const amount = req.body.amount;
   const completion = req.body.completion;
   const description = req.body.description;
-  const images = req.body.images;
+  const image = req.file.path;
+  // const images = "images/property-4.jpg";
+  // const image = req.body.image;
 
   Property.create({
     name: name,
@@ -29,7 +34,7 @@ const createProperty = (req, res, next) => {
     amount: amount,
     completion: completion,
     description: description,
-    images: images,
+    image: image,
   })
     .then((property) => {
       res.status(201).json({
@@ -118,7 +123,7 @@ const updatePropertiesById = (req, res, next) => {
     amount,
     completion,
     description,
-    images,
+    image,
   } = req.body;
 
   Property.findByPk(propertyId)
@@ -137,7 +142,7 @@ const updatePropertiesById = (req, res, next) => {
       updatedProperty.amount = amount;
       updatedProperty.completion = completion;
       updatedProperty.description = description;
-      updatedProperty.images = images;
+      updatedProperty.image = image;
       return updatedProperty.save();
     })
     .then((updatedProperty) => {
