@@ -11,7 +11,7 @@ const router = express.Router();
 
 // /api/admin/users/property => POST
 router.post(
-  "/property",
+  "/property", checkAuth,
   [
     check("name").not().isEmpty().withMessage("Name field must not be empty"),
     check("slug").not().isEmpty().withMessage("Slug field must not be empty"),
