@@ -45,7 +45,11 @@ const app = express();
 // MIDDLEWARES
 app.use(bodyParser.json());
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+  multer({
+    limits: 500000,
+    storage: fileStorage,
+    fileFilter: fileFilter,
+  }).single("image")
 );
 app.use("/images", express.static(path.join(__dirname, "images")));
 
@@ -86,6 +90,12 @@ app.use((req, res, next) => {
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
+  }
+  // Deletes image when property upload is not successful
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
   }
   res.status(error.code || 500);
   res.json({

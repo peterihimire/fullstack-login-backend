@@ -24,6 +24,7 @@ const createProperty = (req, res, next) => {
   const completion = req.body.completion;
   const description = req.body.description;
   const image = req.file.path;
+  console.log(image)
   // const images = "images/property-4.jpg";
   // const image = req.body.image;
 

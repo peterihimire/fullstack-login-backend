@@ -23,16 +23,11 @@ router.post(
     check("completion")
       .isNumeric()
       .withMessage("Completion field must not be empty"),
-    check("description")
-      .isLength({ min: 5 })
-      .withMessage("Description field must not be empty"),
-    check("image")
-      .not()
-      .isEmpty()
-      .withMessage("Image field must not be empty"),
+    check("description").isLength({ min: 5 }),
   ],
   adminController.createProperty
 );
+// check("image").not().isEmpty(),
 
 // /api/admin/properties => GET
 router.get("/properties", checkAuth, adminController.getProperties);
