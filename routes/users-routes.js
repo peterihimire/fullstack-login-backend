@@ -21,6 +21,8 @@ router.post(
       .trim()
       .isLength({ min: 6 })
       .withMessage("Password must be minimum of 6 char."),
+      // Added this for admin check
+    check("admincode").not().isEmpty().withMessage("Enter admin secrete code."),
   ],
   usersController.signup
 );
