@@ -178,6 +178,7 @@ const login = (req, res, next) => {
       return existingUser;
     })
     .then((existingUser) => {
+      // console.log(existingUser);
       return bcrypt
         .compare(password, existingUser.password)
         .then((doMatch) => {
@@ -196,6 +197,7 @@ const login = (req, res, next) => {
               token: token,
               userId: existingUser.id,
               userName: existingUser.name,
+              admin: existingUser.isAdmin
               // user: user,
             });
           }
