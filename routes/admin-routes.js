@@ -11,7 +11,8 @@ const router = express.Router();
 
 // /api/admin/users/property => POST
 router.post(
-  "/property", checkAuth,
+  "/property",
+  checkAuth,
   [
     check("name").not().isEmpty().withMessage("Name field must not be empty"),
     check("slug").not().isEmpty().withMessage("Slug field must not be empty"),
@@ -45,7 +46,6 @@ router.put(
     check("amount").isNumeric(),
     check("completion").isNumeric(),
     check("description").isLength({ min: 5 }),
-    check("image").not().isEmpty(),
   ],
   adminController.updatePropertiesById
 );

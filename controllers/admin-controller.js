@@ -24,7 +24,7 @@ const createProperty = (req, res, next) => {
   const completion = req.body.completion;
   const description = req.body.description;
   const image = req.file.path;
-  console.log(image)
+  console.log(image);
   // const images = "images/property-4.jpg";
   // const image = req.body.image;
 
@@ -116,16 +116,15 @@ const updatePropertiesById = (req, res, next) => {
       new HttpError("Invalid inputs passed, please check your fields.", 422)
     );
   }
+
+  // This check is for image upload check
+  if (!req.file) {
+    return next(new HttpError("No image provided.", 422));
+  }
+
   const propertyId = req.params.propertyId;
-  const {
-    name,
-    slug,
-    location,
-    amount,
-    completion,
-    description,
-    image,
-  } = req.body;
+  const { name, slug, location, amount, completion, description } = req.body;
+  const image = req.file.path;
 
   Property.findByPk(propertyId)
     .then((property) => {
