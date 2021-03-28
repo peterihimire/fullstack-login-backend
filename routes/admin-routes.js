@@ -50,6 +50,9 @@ router.put(
   adminController.updatePropertiesById
 );
 
+// /api/admin/properties/propertyId => PATCH
+router.patch("/properties/:propertyId", adminController.updatePropertiesImage);
+
 // /api/admin/properties/propertyId => DELETE
 router.delete("/properties/:propertyId", adminController.deletePropertiesById);
 

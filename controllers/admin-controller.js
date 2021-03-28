@@ -117,14 +117,14 @@ const updatePropertiesById = (req, res, next) => {
     );
   }
 
-  // This check is for image upload check
-  if (!req.file) {
-    return next(new HttpError("No image provided.", 422));
-  }
+  // // This check is for image upload check
+  // if (!req.file) {
+  //   return next(new HttpError("No image provided.", 422));
+  // }
 
   const propertyId = req.params.propertyId;
   const { name, slug, location, amount, completion, description } = req.body;
-  const image = req.file.path;
+  // const image = req.file.path;
 
   Property.findByPk(propertyId)
     .then((property) => {
@@ -142,7 +142,7 @@ const updatePropertiesById = (req, res, next) => {
       updatedProperty.amount = amount;
       updatedProperty.completion = completion;
       updatedProperty.description = description;
-      updatedProperty.image = image;
+      // updatedProperty.image = image;
       return updatedProperty.save();
     })
     .then((updatedProperty) => {
@@ -159,6 +159,54 @@ const updatePropertiesById = (req, res, next) => {
       next(error);
     });
   // .catch((err) => console.log(err));
+};
+
+// @route PATCH api/admin/properties/id
+// @desc To update the image of a single property
+// @access Private
+const updatePropertiesImage = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs passed, please check your fields.", 422)
+    );
+  }
+
+  // This check is for image upload check
+  if (!req.file) {
+    return next(new HttpError("No image provided.", 422));
+  }
+
+  const propertyId = req.params.propertyId;
+
+  const image = req.file.path;
+
+  Property.findByPk(propertyId)
+    .then((property) => {
+      if (!property) {
+        return next(
+          new HttpError("No property found for this particular id.", 404)
+        );
+      }
+      return property;
+    })
+    .then((updatedProperty) => {
+      updatedProperty.image = image;
+      return updatedProperty.save();
+    })
+    .then((updatedProperty) => {
+      res.status(200).json({
+        status: "Successful",
+        msg: "Property image updated",
+        property: updatedProperty,
+      });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
 
 // @route DELETE api/admin/properties/id
@@ -355,6 +403,7 @@ exports.createProperty = createProperty;
 exports.getProperties = getProperties;
 exports.getPropertiesById = getPropertiesById;
 exports.updatePropertiesById = updatePropertiesById;
+exports.updatePropertiesImage = updatePropertiesImage;
 exports.deletePropertiesById = deletePropertiesById;
 exports.getUsers = getUsers;
 exports.getUserById = getUserById;
